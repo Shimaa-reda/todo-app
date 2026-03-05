@@ -6,6 +6,7 @@
     <title>Todo List</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 
 <body class="bg-light">
@@ -57,7 +58,7 @@
                             name="description"
                             class="form-control"
                             rows="2"
-                            placeholder="Description (optional)">{{ old('description', $editingTask?->description) }}</textarea>
+                            placeholder="Description">{{ old('description', $editingTask?->description) }}</textarea>
                     </div>
 
                     @if($editingTask)
@@ -129,9 +130,57 @@
             @endforelse
         </div>
 
+        <!-- api part -->
+        <h2 class="mt-5 mb-3">API Items</h2>
+        <div id="api-cards" class="row g-3">
+            <!-- cards -->
+
+        </div>
+
+
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function getPizza(){
+            try{
+
+            const res=await fetch('https://forkify-api.jonas.io/api/v2/recipes?search=pasta')
+            var data=await res.json();
+            console.log(data);
+
+            display(data.data.recipes);
+            }
+
+            catch(err){
+                console.log(err);
+            }
+}
+
+        getPizza();
+        function display(recipes){
+            var cartona=``;
+            for(var i=0;i<recipes.length;i++){
+                cartona+=`
+                <div class="col-sm-12 col-md-4 col-lg-3" id="${recipes[i].id}">
+            <div class="card mb-4 h-100">
+                <img src="${recipes[i].image_url}" alt="${recipes[i].title}" class="w-100" style="height:200px;object-fit:cover;">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h4>${recipes[i].title}</h4>
+                    <button class="btn btn-danger" onclick="deleteCard('${recipes[i].id}')">Delete</button>
+                </div>
+             </div>
+
+             </div>
+                `
+            }
+            document.getElementById('api-cards').innerHTML=cartona;
+        }
+        function deleteCard(id){
+    document.getElementById(id).remove();
+}
+
+    </script>
 </body>
 
 </html>

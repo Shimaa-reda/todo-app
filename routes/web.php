@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', fn () => redirect()->route('tasks'));
+Route::get('/', fn () => redirect()->route('tasks.index'));
 Route::resource('tasks', TaskController::class);
 Route::patch('/tasks/{task}/toggle', [TaskController::class, 'toggle'])->name('tasks.toggle');
 // = resourse route for task controller
